@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://tajhezat.herokuapp.com/api/v1',
+  apiEndpoint: 'http://api.cloudsleepers.com',
 };
 
 /*
