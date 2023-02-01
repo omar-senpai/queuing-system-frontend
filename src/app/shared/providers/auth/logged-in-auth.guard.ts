@@ -17,9 +17,12 @@ export class LoggedInAuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     console.log('inside canActivate in logged-in-auth.guard.ts');
-
+      console.log('auuuth');
+      
     return this.auth.isLoggedIn().pipe(
       map(isLoggedIn => {
+        console.log('isLoggedIn',isLoggedIn);
+        
         if (!isLoggedIn) {
           return true;
         } else {

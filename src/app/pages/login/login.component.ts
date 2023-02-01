@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     var user = this.auth.login(userCredentials).add(
       () => {
         console.log("user logged in");
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       }
     );
     console.log(user);
