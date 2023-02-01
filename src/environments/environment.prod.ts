@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiEndpoint: 'Api.cloudsleepers.com/api/v1',
+  apiEndpoint: '172.26.0.25/api/v1',
 };
