@@ -37,6 +37,10 @@ export class AuthenticationService {
     isLoggedIn() {
         console.log('inside login');
         const token = localStorage.getItem('currentUser');
+        console.log('token',token);
+        
+        console.log('zzzzzzzzz');
+        
         if (token)
             return of(this.parseJwt(token));
         return of(false);

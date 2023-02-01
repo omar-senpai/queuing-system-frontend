@@ -1,60 +1,97 @@
-import { Component, OnInit } from '@angular/core';
-import Chart from 'chart.js';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import Chart from "chart.js";
+import { AuthenticationService } from "src/app/shared/providers/auth/auth.service";
+import { EndpointsService } from "src/app/shared/providers/endpoints.service";
 
 // core components
 import {
   chartOptions,
   parseOptions,
   chartExample1,
-  chartExample2
+  chartExample2,
 } from "../../variables/charts";
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: "app-dashboard",
+  templateUrl: "./dashboard.component.html",
+  styleUrls: ["./dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit {
-
   public datasets: any;
   public data: any;
   public salesChart;
   public clicked: boolean = true;
   public clicked1: boolean = false;
+  firstName;
+  userId;
+  isAdmin;
+  userDetails;
+  specialty = 0;
+
+  category: any = [
+    "general",
+    "dental",
+    "eye",
+    "ent",
+    "gynecology",
+    "ortho",
+    "pediatric",
+    "physiotherapy",
+    "radiology",
+    "surgery",
+    "urology",
+    "other",
+  ];
+  constructor(
+    private router: Router,
+    private _endpointsService: EndpointsService,
+    private _authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit() {
+    let user = this._authenticationService.getUserInfo();
+    console.log(user);
 
-    this.datasets = [
-      [0, 20, 10, 30, 15, 40, 20, 60, 60],
-      [0, 20, 5, 25, 10, 30, 15, 40, 40]
-    ];
-    this.data = this.datasets[0];
+    if (user.roles == "patient") {
+      this.isAdmin = false;
+    }else{
+      this.isAdmin = true;
+    }
+    this.firstName = user.firstName;
+    this.userId = user.userId;
 
+    this.specialty = user.specialty;
 
-    var chartOrders = document.getElementById('chart-orders');
-
-    parseOptions(Chart, chartOptions());
-
-
-    var ordersChart = new Chart(chartOrders, {
-      type: 'bar',
-      options: chartExample2.options,
-      data: chartExample2.data
+    this._endpointsService.getNumberDetails(this.specialty).subscribe((res) => {
+      // this.router.navigate(['/number-details',sectionId]);
+      console.log(res);
+      this.userDetails = res;
     });
 
-    var chartSales = document.getElementById('chart-sales');
 
-    this.salesChart = new Chart(chartSales, {
-			type: 'line',
-			options: chartExample1.options,
-			data: chartExample1.data
-		});
   }
-
 
   public updateOptions() {
     this.salesChart.data.datasets[0].data = this.data;
     this.salesChart.update();
   }
 
+  generateNumber(sectionId: number) {
+    let body = {
+      patientId: this.userId,
+      name: this.firstName,
+      section: sectionId,
+    };
+
+    this._endpointsService.addUserToQueue(body).subscribe((res) => {
+      this.router.navigate(["/number-details", sectionId]);
+    });
+  }
+
+  deactivate(id) {
+    this._endpointsService.deactivateNumber(id).subscribe((res) => {
+      this.ngOnInit();
+    });
+  }
 }

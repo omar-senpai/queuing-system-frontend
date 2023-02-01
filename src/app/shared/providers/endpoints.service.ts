@@ -28,4 +28,27 @@ export class EndpointsService {
             }));
     }
 
+    addUserToQueue(body:any){
+        return this.http.post<any>(`${this.baseUrl}/queue`, body)
+        .pipe(map(result => {
+            return result;
+        }));
+        
+
+    }
+    getNumberDetails(id:any) {
+        return this.http.get<any>(`${this.baseUrl}/queue/${id}`)
+            .pipe(map(result => {
+                return result.filter(res => res.isActive == true);
+            }));
+    }
+
+    deactivateNumber(id:any){
+        return this.http.post<any>(`${this.baseUrl}/queue/${id}`,'')
+        .pipe(map(result => {
+            return result;
+        }));
+
+    }
+
 }
