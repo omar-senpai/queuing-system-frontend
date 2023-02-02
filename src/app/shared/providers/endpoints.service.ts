@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient,HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -13,23 +13,26 @@ export class EndpointsService {
     ) { }
 
     baseUrl = environment.apiEndpoint;
+     headers = new HttpHeaders({
+        'Host': 'api'
+      })
 
     login(user: UserLoginModel) {
-        return this.http.post<any>(`${this.baseUrl}/auth`, user)
+        return this.http.post<any>(`${this.baseUrl}/auth`, user,{headers:this.headers})
             .pipe(map(user => {
                 return user;
             }));
     }
 
     register(user: CreateUserModel) {
-        return this.http.post<any>(`${this.baseUrl}/users`, user)
+        return this.http.post<any>(`${this.baseUrl}/users`, user,{headers:this.headers})
             .pipe(map(user => {
                 return user;
             }));
     }
 
     addUserToQueue(body:any){
-        return this.http.post<any>(`${this.baseUrl}/queue`, body)
+        return this.http.post<any>(`${this.baseUrl}/queue`, body,{headers:this.headers})
         .pipe(map(result => {
             return result;
         }));
@@ -37,14 +40,14 @@ export class EndpointsService {
 
     }
     getNumberDetails(id:any) {
-        return this.http.get<any>(`${this.baseUrl}/queue/${id}`)
+        return this.http.get<any>(`${this.baseUrl}/queue/${id}`,{headers:this.headers})
             .pipe(map(result => {
                 return result.filter(res => res.isActive == true);
             }));
     }
 
     deactivateNumber(id:any){
-        return this.http.post<any>(`${this.baseUrl}/queue/${id}`,'')
+        return this.http.post<any>(`${this.baseUrl}/queue/${id}`,'',{headers:this.headers})
         .pipe(map(result => {
             return result;
         }));
