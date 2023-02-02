@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'http://api.cloudsleepers.com',
+  apiEndpoint: '172.26.0.25/api/v1',
 };
 
 /*
