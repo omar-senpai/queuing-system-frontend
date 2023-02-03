@@ -36,6 +36,8 @@ export class RegisterComponent implements OnInit {
     this.endpoints.register(this.registrationForm.value).subscribe(
       res => {
         this.router.navigate(['/login']);
+      },(error) =>{
+        document.getElementById('modal-click').click();
       }
     );
 

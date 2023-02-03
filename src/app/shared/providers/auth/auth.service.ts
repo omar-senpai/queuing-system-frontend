@@ -31,6 +31,8 @@ export class AuthenticationService {
             this.currentUserSubject.next(res);
 
             // redirect to home page
+        },(error)=>{
+            document.getElementById('modal-click').click();
         });
     }
 
